@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import SearchBar from './components/SearchBar';
 import WeatherCard from './components/WeatherCard';
-import WelcomeScreen from './components/WelcomeScreen';
 import ErrorAlert from './components/ErrorAlert';
 import Lottie from 'lottie-react';
 import loadingAnimation from './assets/loading.json';
@@ -53,13 +52,13 @@ function App() {
   };
 
   const fetchByLocation = () => {
-    console.log("Fetching weather by current location...");
+    console.log("📍 fetchByLocation triggered");
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const { latitude, longitude } = pos.coords;
-          console.log("Latitude:", latitude, "Longitude:", longitude);
+          console.log("✅ Got location:", pos.coords);
 
           setLoading(true);
           setError(false);
@@ -88,7 +87,12 @@ function App() {
           }
         },
         (error) => {
-          console.error("Geolocation failed:", error.message);
+          console.error("❌ Geolocation failed:", error.message);
+          if (error.code === error.PERMISSION_DENIED) {
+            alert("⚠️ Location access denied. Please allow location permissions in your browser or search manually.");
+          } else {
+            alert("⚠️ Unable to access your location. Please try again.");
+          }
           setError(true);
         }
       );
