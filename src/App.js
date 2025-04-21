@@ -72,8 +72,13 @@ function App() {
             const res2 = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`);
             const data2 = await res2.json();
 
-            if (data1.cod === '404' || data2.cod === '404') {
+            console.log("🌍 Weather data response:", data1);
+            console.log("🌤️ Forecast data response:", data2);
+
+            if (data1.cod !== 200 || data2.cod !== "200") {
+              console.error("Weather API error:", data1, data2);
               setError(true);
+              alert("⚠️ Could not fetch weather for your location. Please try searching manually.");
             } else {
               setWeatherData(data1);
               setForecastData(data2);
@@ -98,6 +103,7 @@ function App() {
       );
     } else {
       console.error("Geolocation is not supported by this browser.");
+      alert("⚠️ Geolocation is not supported by this browser.");
       setError(true);
     }
   };
